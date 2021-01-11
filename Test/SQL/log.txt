@@ -1,0 +1,589 @@
+Имя теста:	TestMethod1
+Результаты теста:	Пройден
+Стандартный вывод результата:	
+Трассировка отладки:
+Database: Data Source=NTB000382\SQL2008;Initial Catalog=BookStore;Integrated Security=True
+Opened connection at 15.08.2019 11:07:45 +03:00
+
+Started transaction at 15.08.2019 11:07:45 +03:00
+
+CREATE TABLE [dbo].[Author] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Name] [nvarchar](max) NOT NULL,
+    CONSTRAINT [PK_dbo.Author] PRIMARY KEY ([Id])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 45 ms with result: -1
+
+
+
+CREATE TABLE [dbo].[Book] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Name] [nvarchar](max) NOT NULL,
+    [PublisherId] [int],
+    [HasElectronic] [bit] NOT NULL,
+    [Published] [int] NOT NULL,
+    [Raiting] [int],
+    CONSTRAINT [PK_dbo.Book] PRIMARY KEY ([Id])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: -1
+
+
+
+CREATE INDEX [IX_PublisherId] ON [dbo].[Book]([PublisherId])
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 2 ms with result: -1
+
+
+
+CREATE TABLE [dbo].[BookGenre] (
+    [BookId] [int] NOT NULL,
+    [GenreId] [int] NOT NULL,
+    CONSTRAINT [PK_dbo.BookGenre] PRIMARY KEY ([BookId], [GenreId])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: -1
+
+
+
+CREATE INDEX [IX_BookId] ON [dbo].[BookGenre]([BookId])
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+CREATE INDEX [IX_GenreId] ON [dbo].[BookGenre]([GenreId])
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+CREATE TABLE [dbo].[Genre] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Name] [nvarchar](max) NOT NULL,
+    CONSTRAINT [PK_dbo.Genre] PRIMARY KEY ([Id])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: -1
+
+
+
+CREATE TABLE [dbo].[Publisher] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Name] [nvarchar](max) NOT NULL,
+    CONSTRAINT [PK_dbo.Publisher] PRIMARY KEY ([Id])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+CREATE TABLE [dbo].[BookAuthor] (
+    [BookId] [int] NOT NULL,
+    [AuthorId] [int] NOT NULL,
+    CONSTRAINT [PK_dbo.BookAuthor] PRIMARY KEY ([BookId], [AuthorId])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+CREATE INDEX [IX_BookId] ON [dbo].[BookAuthor]([BookId])
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+CREATE INDEX [IX_AuthorId] ON [dbo].[BookAuthor]([AuthorId])
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_dbo.Book_dbo.Publisher_PublisherId] FOREIGN KEY ([PublisherId]) REFERENCES [dbo].[Publisher] ([Id])
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: -1
+
+
+
+ALTER TABLE [dbo].[BookGenre] ADD CONSTRAINT [FK_dbo.BookGenre_dbo.Book_BookId] FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id]) ON DELETE CASCADE
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+ALTER TABLE [dbo].[BookGenre] ADD CONSTRAINT [FK_dbo.BookGenre_dbo.Genre_GenreId] FOREIGN KEY ([GenreId]) REFERENCES [dbo].[Genre] ([Id]) ON DELETE CASCADE
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+ALTER TABLE [dbo].[BookAuthor] ADD CONSTRAINT [FK_dbo.BookAuthor_dbo.Book_BookId] FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id]) ON DELETE CASCADE
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+ALTER TABLE [dbo].[BookAuthor] ADD CONSTRAINT [FK_dbo.BookAuthor_dbo.Author_AuthorId] FOREIGN KEY ([AuthorId]) REFERENCES [dbo].[Author] ([Id]) ON DELETE CASCADE
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: -1
+
+
+
+CREATE TABLE [dbo].[__MigrationHistory] (
+    [MigrationId] [nvarchar](150) NOT NULL,
+    [ContextKey] [nvarchar](300) NOT NULL,
+    [Model] [varbinary](max) NOT NULL,
+    [ProductVersion] [nvarchar](32) NOT NULL,
+    CONSTRAINT [PK_dbo.__MigrationHistory] PRIMARY KEY ([MigrationId], [ContextKey])
+)
+
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 13 ms with result: -1
+
+
+
+INSERT [dbo].[__MigrationHistory]([MigrationId], [ContextKey], [Model], [ProductVersion])
+VALUES (N'201908141110525_Initial', N'Data.Cqrs.Test.Migrations.Configuration',  0x1F8B0800000000000400ED5C5B6FDB36147E1FB0FF20E8691B522B695FBAC06E913AC916ACB9204E8ABD058C443B42294A15A9C0C6B05FB687FDA4FD8591BA52BCE862B9B65B04058246E4393C978F87873CA7FDEF9F7FC7EF9701B29E614CFC104FECA3D1A16D41EC869E8F17133BA1F3576FEDF7EF7EFC617CE6054BEB5331EF0D9FC7283199D84F9446C78E43DC271800320A7C370E4938A723370C1CE085CEEBC3C35F9DA32307321636E36559E3DB04533F80E92FECD769885D18D104A0CBD08388E4DFD9C82CE56A5D81009208B870629F020A46D32F3119DD41424767E7B675827CC004994134B72D8071480165621EDF1338A3718817B3887D00E86E1541366F0E1081B9F8C7D5F4AE9A1CBEE69A381561C1CA4D080D839E0C8FDEE4A67164F2B50C6C97A663C63B6346A62BAE756AC0897D92D0A730B62D79A9E3298AF934C5BA19C18155FF7C500281E185FF39B0A609A2490C2718263406E8C0BA491E91EFFE015777E1678827384148948D49C7C66A1FD8A79B388C604C57B7709E4B7CE1D99653A77364C2924CA0C9B4B9C0F4CD6BDBBA628B8347044BD70B9ACF6818C3DF208631A0D0BB0194C218731E30359EB2BAB416FF59ACC6B0C6768D6D5D82E5478817F46962B3BFDAD6B9BF845EF12597E01EFB6C9331221A275023A1B4EA1578F617A9C0D2FA1FC2F033B1AD5B88D251F2E447D94618F19187CC7F6CC2791C06B721CA298AEF0F77205E40CA14083583B330895D4996B15381AA116A9C530FA0F1E92F30DB35CCA45553E39227182BAA36D3FD0EC819822E0FBDBE5B50320F2308F0DA42B45ABB99CD2DF0696AB6263D8CDBACDC47EB6EB4622F69375AB10BFB6C7A86A5189A054A871FB24D5817A91AD1EE7E6158B7FF9BC42AE16236933045325439A2375535AC3356AFA8946AD83334A5343B8C4F5C06354669A7A6A2AE13CF8A3586ECB272F15E4C1A813E0CE23A30697640578172EC344A94CFD18994FD34CB94FD1C84F0BEE8DE35B25F4EDEF62D90C5FA6988F8A19ADE0C8601D01CF7EB005D0B804288EF0CC292E605887B0DC48604A8CBC9AEBD6DA8077F17D89D1012BA7E2A89205F9986D5753AC39ED5949365362D5461666510F323062AB6F0C4FE45B191815FA95EC5AFB87037721C3B8236ED4A0AE75E9358BA43B0AE681E27FA69AB4B1F9BED7764CB9BEF1A9F420429B44EDCEC9D640A880B3C158CCCF95EFD0BDBAF30E61B06A02903218B003EA6EAE6F6B1EB470035CA2D51750C0A5CAA92BF3C720A2388F97E6EF44397858D099F53AE2199AACD326BA12C83483B1EA4C466633893CEAB8AAF96E73E21AD26F956A156F34597950D37862D824D383D1A23ADE6923830766B0EA78AA370A6D5D91E8E46470AE7B501A30AB125BCA8F6ECB270ED55680B90C91200464319058C05D8F06F70493589E63D8179AE49F2C4474601E73983547EDFA9B20DE904576054679067470A7906CA0EC4C57B8E96431EED5AD8185974232FFDAA63216C05898DE0B5BA46D59B983045F7662643A8255D2BE52EADAE80B0254113389432CAE7415DAD8E2A8B4F127AA54DC95B97F44D52BC70778BF69A84ADCD8283B4CFC1D6A4BE26ABE894570C31403D931038E9B9AC6902F11A6440BDE1A8EB72D8F547BE7ABC093CC40DDF59FBE24256C6E3AA56EB64C5DAA2A8EB18AABAE34B1045ECFA2A5479F32FD62C2BF14E5FCDFA173F838C87E3124D0DB494B65C895DC6C1024AA36C6926E9B91F13CADF211E01BF204FBD4099269E3E86A85AAC543F60547F1581B698CFFF9ED12895EEE230524FE99CF89CE914F0333E7D6B50C29C4A9856D80102B1E661631AA224C0E664C34C9D3D5588F4D91795C3D8912457D209C5404ADE5EB777276F64BB67982F7431BC8327F464BBF68389432DD71319352681667E526550E4280DF597D120612FF9CA2AA1C8A9FCB857F8CDCFADE120D69EC61D916CA03599B778D510AD6B7AE9307329EFAB221BE32576674EDA8883D6754E4FC77CE7F15EC87486B9C398BC75704903EDF7EE967A36A9C6B2EAAAD816ACAA99BA70A44F737852AC0944F2C552B54A279F985F6A85657B4A647C06EA2451C6A59F4C72C6AFBA5149FCE5292588CA0B8094E88FF3A4BBBDC753C9C2B329B6C5647FF63D9E81CF5684C26094A264F6054D91CF605B4DB804D89F33DC6435419B5D12DE4A7DA2FBD3B3E910E221CDA5A54BE3E605F6E07262FF65FDBDFD9AA7CF0DDE5AD5ECD941229639F13388DD2710FF1480E5CF2D9C863626BE18D2C849D306984A6CB621A73BB62EFE7C10480FACEB986DCC63EB90995810212B4BAFD150F8E8D3E1CD84A922C35A092516AA3E1BE94E1B86CFEDF78F754548466502C73A4D675D57CEC97A2C3DB809EB25C8F4B5645337D18B35FB5AD394236F3C889852D03D8E2295C8FD962EE83610479A9B9AB4F714E9C17FBBCD38F5B58B1C5592A0530B9435A07CBEAD6AB9F1F17D0FBB771A6F9282DF343ED3FBEB3BC34D0F5F6E17394D77F7AD767EB5F617EE32D4E4F9D57A7D667B1F684C6FBE7B1867BA7409AACEFAFACD7BBB864B77176E152FDF44A79F90F2AFDD8BD733546DC8EB4DD581AFE2F96FA85F4F6DAC903DA6EBC86B68C8CB9E8427B6F71832FF66B9768F663D63AF9E8E6FBF2EBEE6263E13FF1E3D7EE6163F1DF39EDD7FCDCD7FBA05CCBD813A13191D2B0E9A8C6470706B0F62D942D5DC8A68280529E144EEE768EBC3AAEB2C97AB36D47A267739B6A8AAAF3169EE066A1BD13EA8BBC156CBFEFEACED42A91962CF7A295551B562EE40C50DF54A2A814B2AB6B729DAEAFDCD3443AAB54F76C40AFF0B0E3BDF89BFA858F0FF130767FFDCB3625ACCB9C0F3B038E825898A29D2EBD625A4C06327EF494CFD3970291B7621216919E31340099B72163C42EF025F27344A285319068FA8F6AF1279AED0B47EDAF15997797C1DA5FF5870132A30317DA602BCC61F121F79A5DCE79A0736030B9E84E4EFB5DC9794BFDB2E5625A7AB107764949BAFCC9DEE601021C68C5CE3197886EBC8764FE047B800EEAA28619B99B43BA26EF6F1A90F16310848CEA3A267BF320C7BC1F2DDFF4C8A73C40C4A0000 , N'6.2.0-61023')
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: 1
+
+
+
+Committed transaction at 15.08.2019 11:07:46 +03:00
+
+Opened connection at 15.08.2019 11:07:46 +03:00
+
+Started transaction at 15.08.2019 11:07:46 +03:00
+
+INSERT [dbo].[Genre]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Genre]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: '<не указан>' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 45 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[Genre]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Genre]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'учебная' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 2 ms with result: SqlDataReader
+
+
+
+Committed transaction at 15.08.2019 11:07:46 +03:00
+
+Closed connection at 15.08.2019 11:07:46 +03:00
+
+Opened connection at 15.08.2019 11:07:46 +03:00
+
+Started transaction at 15.08.2019 11:07:46 +03:00
+
+INSERT [dbo].[Author]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Author]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'Толстой Л.Н.' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[Author]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Author]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'Крокодил Гена' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[Author]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Author]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'Чебурашка' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[Book]([Name], [PublisherId], [HasElectronic], [Published], [Raiting])
+VALUES (@0, NULL, @1, @2, NULL)
+SELECT [Id]
+FROM [dbo].[Book]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'Война и мир' (Type = String, Size = -1)
+
+-- @1: 'False' (Type = Boolean)
+
+-- @2: '0' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 3 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[Book]([Name], [PublisherId], [HasElectronic], [Published], [Raiting])
+VALUES (@0, NULL, @1, @2, NULL)
+SELECT [Id]
+FROM [dbo].[Book]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'Приключения Крокодила Гены и Чебурашки (автобиография)' (Type = String, Size = -1)
+
+-- @1: 'False' (Type = Boolean)
+
+-- @2: '0' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[BookAuthor]([BookId], [AuthorId])
+VALUES (@0, @1)
+
+-- @0: '1' (Type = Int32)
+
+-- @1: '1' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: 1
+
+
+
+INSERT [dbo].[BookAuthor]([BookId], [AuthorId])
+VALUES (@0, @1)
+
+-- @0: '2' (Type = Int32)
+
+-- @1: '2' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: 1
+
+
+
+INSERT [dbo].[BookAuthor]([BookId], [AuthorId])
+VALUES (@0, @1)
+
+-- @0: '2' (Type = Int32)
+
+-- @1: '3' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: 1
+
+
+
+INSERT [dbo].[Genre]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Genre]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'реализм' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[BookGenre]([BookId], [GenreId])
+VALUES (@0, @1)
+
+-- @0: '1' (Type = Int32)
+
+-- @1: '3' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 1 ms with result: 1
+
+
+
+INSERT [dbo].[Genre]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Genre]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'детская' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[BookGenre]([BookId], [GenreId])
+VALUES (@0, @1)
+
+-- @0: '2' (Type = Int32)
+
+-- @1: '4' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: 1
+
+
+
+Committed transaction at 15.08.2019 11:07:46 +03:00
+
+Closed connection at 15.08.2019 11:07:46 +03:00
+
+Opened connection at 15.08.2019 11:07:46 +03:00
+
+Started transaction at 15.08.2019 11:07:46 +03:00
+
+INSERT [dbo].[Book]([Name], [PublisherId], [HasElectronic], [Published], [Raiting])
+VALUES (@0, NULL, @1, @2, @3)
+SELECT [Id]
+FROM [dbo].[Book]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'Наш враг Шапокляк' (Type = String, Size = -1)
+
+-- @1: 'True' (Type = Boolean)
+
+-- @2: '0' (Type = Int32)
+
+-- @3: '10' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 3 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[BookAuthor]([BookId], [AuthorId])
+VALUES (@0, @1)
+
+-- @0: '3' (Type = Int32)
+
+-- @1: '2' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: 1
+
+
+
+INSERT [dbo].[BookAuthor]([BookId], [AuthorId])
+VALUES (@0, @1)
+
+-- @0: '3' (Type = Int32)
+
+-- @1: '3' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: 1
+
+
+
+INSERT [dbo].[Genre]([Name])
+VALUES (@0)
+SELECT [Id]
+FROM [dbo].[Genre]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'фантастика' (Type = String, Size = -1)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[BookGenre]([BookId], [GenreId])
+VALUES (@0, @1)
+
+-- @0: '3' (Type = Int32)
+
+-- @1: '5' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:46 +03:00
+
+-- Completed in 0 ms with result: 1
+
+
+
+Committed transaction at 15.08.2019 11:07:46 +03:00
+
+Closed connection at 15.08.2019 11:07:46 +03:00
+
+Opened connection at 15.08.2019 11:07:46 +03:00
+
+SELECT 
+    CASE WHEN ( EXISTS (SELECT 
+        1 AS [C1]
+        FROM [dbo].[Book] AS [Extent1]
+    )) THEN cast(1 as bit) ELSE cast(0 as bit) END AS [C1]
+    FROM  ( SELECT 1 AS X ) AS [SingleRowTable1]
+
+
+-- Executing at 15.08.2019 11:07:47 +03:00
+
+-- Completed in 1 ms with result: SqlDataReader
+
+
+
+Closed connection at 15.08.2019 11:07:47 +03:00
+
+1:, Detached
+Book: Added
+BookGenre: Added
+Author: Unchanged
+Opened connection at 15.08.2019 11:07:47 +03:00
+
+Started transaction at 15.08.2019 11:07:47 +03:00
+
+INSERT [dbo].[Book]([Name], [PublisherId], [HasElectronic], [Published], [Raiting])
+VALUES (@0, NULL, @1, @2, NULL)
+SELECT [Id]
+FROM [dbo].[Book]
+WHERE @@ROWCOUNT > 0 AND [Id] = scope_identity()
+
+
+-- @0: 'new book' (Type = String, Size = -1)
+
+-- @1: 'False' (Type = Boolean)
+
+-- @2: '0' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:47 +03:00
+
+-- Completed in 0 ms with result: SqlDataReader
+
+
+
+INSERT [dbo].[BookAuthor]([BookId], [AuthorId])
+VALUES (@0, @1)
+
+-- @0: '4' (Type = Int32)
+
+-- @1: '1' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:47 +03:00
+
+-- Completed in 6 ms with result: 1
+
+
+
+INSERT [dbo].[BookGenre]([BookId], [GenreId])
+VALUES (@0, @1)
+
+-- @0: '4' (Type = Int32)
+
+-- @1: '1' (Type = Int32)
+
+-- Executing at 15.08.2019 11:07:47 +03:00
+
+-- Completed in 5 ms with result: 1
+
+
+
+Committed transaction at 15.08.2019 11:07:47 +03:00
+
+Closed connection at 15.08.2019 11:07:47 +03:00
+

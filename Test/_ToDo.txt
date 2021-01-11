@@ -1,0 +1,2 @@
+﻿Объединить IQuery и IAsyncQuery
+PageConvertor должен возвращать IEnumerable
