@@ -7,19 +7,38 @@ namespace Kovi.Data.Cqrs
 {
 	public class Failure
 	{
+		public const Int32 Success = 0;
+		public const Int32 Fault = -1;
 		public String Message { get; }
 
-		public Int32? Code { get; }
+		public Int32 Code { get; }
 
 		public ReadOnlyDictionary<String, Object> Data { get; protected set; }
 
 		#region .ctor
 
-		public Failure(params Failure[] failures)
+		public Failure(Int32 errorCode) {
+			if (errorCode == Success)
+			{
+				throw new ArgumentException("The error code must be different from 0", nameof(errorCode));
+			}
+			Code = errorCode;
+		}
+		public Failure(String message, Int32 errorCode)
+			: this(errorCode)
 		{
-			if (!failures.Any()) throw new ArgumentException(nameof(failures));
+			Message = message;
+		}
 
-			Code = -1;
+		public Failure(String message)
+			: this(message, Fault) 
+		{ }
+
+		public Failure(params Failure[] failures)
+			:this(Fault)
+		{
+			if (!failures.Any()) { throw new ArgumentException(nameof(failures)); }
+
 			Message = String.Join(Environment.NewLine, failures.Select(x => x.Message));
 
 			var dict = new Dictionary<String, Object>();
@@ -31,17 +50,9 @@ namespace Kovi.Data.Cqrs
 			Data = new ReadOnlyDictionary<String, Object>(dict);
 		}
 
-		public Failure(String message, Int32? errorCode)
-		{
-			Message = message;
-			Code = errorCode;
-		}
-
-		public Failure(String message)
-			: this(message, 0) { }
 
 		public Failure(String message, Object data)
-			: this(message, 0)
+			: this(message, Fault)
 		{
 			var dict = new Dictionary<String, Object>
 			{
@@ -52,12 +63,13 @@ namespace Kovi.Data.Cqrs
 		}
 
 		public Failure(String message, IDictionary<String, Object> data)
+			: this(message, Fault)
 		{
 			Message = message;
 			Data = new ReadOnlyDictionary<String, Object>(data);
 		}
 
-		public Failure(String message, IEnumerable<Object> data, Int32? errorCode = null)
+		public Failure(String message, IEnumerable<Object> data, Int32 errorCode)
 			: this(message, errorCode)
 		{
 			var dict = new Dictionary<String, Object>();
@@ -73,7 +85,7 @@ namespace Kovi.Data.Cqrs
 		#endregion .ctor
 
 		public override String ToString()
-			=> $"[{Message}"
+			=> $"[({Code}){Message}"
 			+ (Data != null ?
 			$": \r\n{String.Join(",\r\n ", Data.Select(kvp => kvp.Value.ToString()))}]"
 			: "]");
