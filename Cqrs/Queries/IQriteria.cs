@@ -9,6 +9,11 @@ namespace Kovi.Data.Cqrs
 	/// </summary>
 	public interface IQriteria { }
 
+	public interface IConnection
+	{ 
+		String Connection { get; }
+	}
+
 	public interface IPageQriteria 
 		: IQriteria
 		, IPaging

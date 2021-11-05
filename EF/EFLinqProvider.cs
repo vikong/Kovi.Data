@@ -10,8 +10,6 @@ namespace Kovi.Data.EF
 {
 	public class EFLinqProvider : ILinqProvider
 	{
-		private bool _disposed = false;
-
 		protected DbContext DbContext { get; private set; }
 
 		public EFLinqProvider(DbContext context)
@@ -26,22 +24,22 @@ namespace Kovi.Data.EF
 
 		public IQueryable<TEntity> Query<TEntity>()
 			where TEntity : class
-			=> DbContext.Set<TEntity>();
+			=> this.DbContext.Set<TEntity>();
 
 		public IQueryable<TEntity> Query<TEntity>(String include)
 			where TEntity : class
-			=> DbContext.Set<TEntity>().Include(include);
+			=> this.DbContext.Set<TEntity>().Include(include);
 		public IQueryable<TEntity> Query<TEntity>(IEnumerable<String> includes)
 			where TEntity : class
 		{
-			var q = DbContext.Set<TEntity>() as DbQuery<TEntity>;
+			var q = this.DbContext.Set<TEntity>() as DbQuery<TEntity>;
 			foreach (var s in includes)
 				q = q.Include(s);
 			return q;
 		}
 
 		public IQueryable Query(Type entityType)
-			=> DbContext.Set(entityType);
+			=> this.DbContext.Set(entityType);
 		#endregion
 
 		//public IQueryable<TEntity> Set<TEntity>(String includePath)
@@ -74,7 +72,12 @@ namespace Kovi.Data.EF
 		//}
 
 
-		#region Члены IDisposable
+		#region IDisposable
+
+		private bool _disposed = false;
+
+		~EFLinqProvider()
+			=> Dispose(false);
 
 		public void Dispose()
 		{
@@ -85,18 +88,21 @@ namespace Kovi.Data.EF
 		protected virtual void Dispose(bool disposing)
 		{
 			if (_disposed)
+			{
 				return;
+			}
 
 			if (disposing)
 			{
-				if (DbContext == null)
-					return;
-				DbContext.Dispose();
-				_disposed = true;
-				DbContext = null;
+				// dispose managed state (managed objects).
+				DbContext?.Dispose();
 			}
+
+			// free unmanaged resources (unmanaged objects) and override a finalizer below.
+			// set large fields to null.
+			_disposed = true;
 		}
 
-		#endregion
+		#endregion IDisposable
 	}
 }

@@ -12,19 +12,6 @@ using Kovi.LinqExtensions.Specification;
 
 namespace Data.Cqrs.Test.EF
 {
-	public class IdQriteria : IdQriteria<Int32>
-	{ }
-
-	public class NameQriteria : IQriteria
-	{
-		public String Name { get; set; }
-	}
-
-	/// <summary>
-	/// Книги по автору или наименованию
-	/// </summary>
-	public class BookOrAuthorQriteria : NameQriteria
-	{}
 
 	public class BookOrAuthorFilterSpec 
 		: IFilterSpec<BookOrAuthorQriteria, Book>

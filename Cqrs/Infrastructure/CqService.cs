@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Kovi.Data.Cqrs.Infrastructure;
 
 namespace Kovi.Data.Cqrs
 {
-	public delegate Object InstanceFactory(Type serviceType);
 
 	/// <summary>
 	/// Сервис, обеспечивающий поиск и выполнение команд и запросов.
@@ -14,6 +14,7 @@ namespace Kovi.Data.Cqrs
 		private Func<Type,Object> InstanceLocator { get; }
 
 		private InstanceFactory InstanceFactory { get; }
+
 
 		#region .ctor
 

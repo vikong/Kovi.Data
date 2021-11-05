@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,20 +22,7 @@ using Ninject;
 namespace Data.Cqrs.Test
 {
 
-	public class AuthorDtoComparer : IComparer
-	{
-		public int Compare(object x, object y)
-		{
-			AuthorDto xa = (AuthorDto)x, ya = (AuthorDto)y;
-			if (xa.Id < ya.Id)
-				return 1;
-			if (xa.Id > ya.Id)
-				return -1;
-			return xa.Name.CompareTo(ya.Name);
-		}
-	}
-
-	[TestClass]
+    [TestClass]
 	public class QueryTest
 	{
 		private readonly IServiceLocator serviceLocator;
