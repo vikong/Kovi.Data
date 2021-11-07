@@ -74,9 +74,9 @@
 	public interface ICommandHandlerService
 	{
 		Result Process<TCommand>(TCommand command)
-			where TCommand : ICmdParam;
+			where TCommand : ICommand;
 
 		Task<Result> ProcessAsync<TCommand>(TCommand command)
-			where TCommand : ICmdParam;
+			where TCommand : ICommand;
 	}
 }

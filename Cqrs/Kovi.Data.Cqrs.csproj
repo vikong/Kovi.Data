@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ILinqCommand.cs" />
+    <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\LinqCommand.cs" />
     <Compile Include="Commands\LinqCommandHandler.cs" />
     <Compile Include="Entities\EntityMapAttribute.cs" />
@@ -95,7 +96,9 @@
     <Compile Include="Infrastructure\IHandler.cs" />
     <Compile Include="Queries\IQueryHandler.cs" />
     <Compile Include="Queries\Linq\IHasContext.cs" />
+    <Compile Include="Queries\Linq\ILinqCommandHandler.cs" />
     <Compile Include="Queries\Linq\ILinqQuery.cs" />
+    <Compile Include="Queries\Linq\LinqCommandHandler.cs" />
     <Compile Include="Queries\Linq\LinqQueryHandler.cs" />
     <Compile Include="_\ServiceLocator.cs" />
     <Compile Include="Infrastructure\Validator.cs" />

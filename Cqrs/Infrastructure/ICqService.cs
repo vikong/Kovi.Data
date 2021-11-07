@@ -34,9 +34,9 @@
 	public interface ICommandService
 	{
 		Result Process<TCommand>(TCommand command, String context = null)
-			where TCommand : ICmdParam;
+			where TCommand : ICommand;
 
 		Task<Result> ProcessAsync<TCommand>(TCommand command, String context = null)
-			where TCommand : ICmdParam;
+			where TCommand : ICommand;
 	}
 }

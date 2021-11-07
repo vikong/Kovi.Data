@@ -10,8 +10,27 @@ using System.Threading.Tasks;
 
 namespace Data.Cqrs.Test.EF
 {
+	public sealed class CreateAuthorCmd: ICommand
+	{
+		public String Name { get; set; }
+	}
+
+	public sealed class CreateAuthorCommand : ILinqCommand<CreateAuthorCmd>
+	{
+		public Result Execute(CreateAuthorCmd param, IUnitOfWork uow)
+		{
+			Author newAuthor = Author.Create(param.Name);
+
+			uow.Add(newAuthor);
+			uow.Commit();
+
+			return Result.Ok(newAuthor);
+		}	
+	}
+
+
 	[CreateBookCmdValidate]
-	public sealed class CreateBookCmd: ICmdParam, IQriteria
+	public sealed class CreateBookCmd: ICommand, IQriteria
 	{
 		[Required(AllowEmptyStrings = false, ErrorMessage ="Требуется наименование")]
 		public String Name { get; set; }

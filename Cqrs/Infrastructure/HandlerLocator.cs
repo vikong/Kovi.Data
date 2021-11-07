@@ -59,11 +59,11 @@ namespace Kovi.Data.Cqrs
 		/// <returns>Результат выполнения команды</returns>
 		Result ICommandHandlerService.Process<TCommand>(TCommand command)
 		{
-			throw new NotImplementedException();
-			//// получим команду
-			//var cmd = Get<ICommand<TCommand>>();
+			// получим команду
+			var commandHandler = Get<ICommandHandler<TCommand>>();
 
-			//// запрос - проверка
+			// TODO: перенести в декоратор
+			// запрос - проверка
 			//var validateQuery = cmd.GetType()
 			//	.GetCustomAttribute<ValidateCommandAttribute>();
 
@@ -80,6 +80,8 @@ namespace Kovi.Data.Cqrs
 			//		Get<ICommand<TCommand>>()
 			//		.Execute(command, context)
 			//	);
+
+			return commandHandler.Handle(command);
 		}
 
 		Task<Result> ICommandHandlerService.ProcessAsync<TCommand>(TCommand command)

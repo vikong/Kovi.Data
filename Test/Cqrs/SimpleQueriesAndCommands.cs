@@ -10,6 +10,8 @@ using Kovi.Data.Cqrs.Linq;
 
 namespace Data.Cqrs.Test
 {
+	#region Queries
+
 	public class StringQriteria : IQriteria
 	{
 		public String Name { get; set; }
@@ -20,9 +22,9 @@ namespace Data.Cqrs.Test
 		public QueryResult<String> Handle(StringQriteria qrit)
 		{
 			string data = $"SimpleQuery:{qrit.Name}";
-			
-			var result=new QueryResult<String>(data);
-			
+
+			var result = new QueryResult<String>(data);
+
 			result.From(nameof(SimpleQuery));
 
 			return result;
@@ -86,6 +88,27 @@ namespace Data.Cqrs.Test
 		}
 	}
 
+	#endregion Queries
+
+	#region Commands
+
+	public class SimpleCommand: ICommand
+	{
+		public string Name { get; set; }
+	}
+
+	public class SimpleCommandHandler : ICommandHandler<SimpleCommand>
+	{
+		public static string Data = "SimpleCommandHandler";
+		public Result Handle(SimpleCommand command)
+		{
+			List<string> data = new List<string>();
+			data.Add($"{Data}:{command.Name}");
+			return Result.Ok(data);
+		}
+	}
+
+	#endregion Commands
 
 	public class Entity
 	{

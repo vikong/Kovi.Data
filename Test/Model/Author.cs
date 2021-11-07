@@ -34,16 +34,25 @@ namespace Data.Cqrs.Test
 			Initialize();
 		}
 
-		public Author(Int32 id) : base(id) {}
+		public Author(Int32 id) 
+			: base(id) 
+		{ }
 
-		public Author (Int32 id, String authorName):base(id)
+		public Author (Int32 id, String authorName)
+			:base(id)
 		{
 			Name=authorName;
 			Books=new List<Book>();
 		}
 
+		public Author(String authorName)
+			:base(0)
+		{
+			Name = authorName;
+		}
+
 		public static Author Create(String authorName)
-			=> new Author(0, authorName);
+			=> new Author(authorName);
 
 		/// <summary>
 		/// Правило "Заслуженный писатель"

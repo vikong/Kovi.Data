@@ -44,6 +44,9 @@ namespace Data.Cqrs.Test
 			builder.RegisterType<SimpleIdQuery>()
 				.As<IQueryHandler<IntQriteria, QueryResult<String>>>();
 
+			// команды
+			builder.RegisterType<SimpleCommandHandler>()
+				.As<ICommandHandler<SimpleCommand>>();
 		}
 	}
 
@@ -100,6 +103,23 @@ namespace Data.Cqrs.Test
 			Assert.AreEqual($"SimpleQuery:{qrit.Name}", actual.Data);
 			Assert.AreEqual(actual.Stack[0], "SimpleQuery");
 			Assert.AreEqual(actual.Stack[1], "TestDecoratorQueryHandler");
+
+		}
+
+		[TestMethod]
+		public void HandlerLocator_ForCommand_ReturnsCommandHandler()
+		{
+			var cmd = new SimpleCommand { Name = "А" };
+
+			var sl = Container.Resolve<IHandlerService>();
+
+			var actual = sl.Process(cmd);
+
+
+			Assert.IsTrue(actual.IsSuccess);
+			var ret = actual.Return(r => ((List<String>)r), f => throw new Exception());
+
+			Assert.AreEqual($"{SimpleCommandHandler.Data}:{cmd.Name}", ret[0]);
 
 		}
 

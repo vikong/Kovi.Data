@@ -5,7 +5,7 @@ namespace Kovi.Data.Cqrs.Linq
 	public abstract class LinqCommand<TParam> :
 		ILinqCommand,
 		ICommand<TParam>
-		where TParam : ICmdParam
+		where TParam : ICommand
 	{
 		private readonly ILinqCommandHandler CommandHandler;
 

@@ -1,31 +1,23 @@
 ﻿using Autofac;
-using Kovi.Autofac;
-using Kovi.Data.Cqrs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Cqrs.Test
 {
-    public abstract class BaseAutofacTest
-    {
-        protected static IContainer Container { get; private set; }
-        protected static IServiceLocator Sl { get; private set; }
+	public abstract class BaseAutofacTest
+	{
+		protected static IContainer Container { get; private set; }
+		//protected static IServiceLocator Sl { get; private set; }
 
-        public BaseAutofacTest()
-        {
-            var builder = new ContainerBuilder();
+		public BaseAutofacTest()
+		{
+			var builder = new ContainerBuilder();
 
-            builder.RegisterModule(AutofacModule);
+			builder.RegisterModule(AutofacModule);
 
-            Container = builder.Build();
+			Container = builder.Build();
 
-            Sl = new AutofacServiceLocator(Container);
+			//Sl = new AutofacServiceLocator(Container);
+		}
 
-        }
-
-        protected abstract Module AutofacModule { get; }
-    }
+		protected abstract Module AutofacModule { get; }
+	}
 }
