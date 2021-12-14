@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Представляет сервис, обеспечивающий поиск и выполнение команд и запросов.
 	/// </summary>
-	public interface IHandlerService
+	public interface ICqHandlerService
 		: IQueryHandlerSpecificator, ICommandHandlerService
 	{ }
 

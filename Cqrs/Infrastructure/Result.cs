@@ -2,7 +2,26 @@
 
 namespace Kovi.Data.Cqrs
 {
+	/// <summary>
+	/// Представляет возможности для работы с результатом выполнения
+	/// </summary>
+	public interface IResult
+	{ 
+
+		Boolean IsSuccess { get; }
+
+		Boolean IsFaulted { get; }
+
+		TDestination Return<TDestination>(Func<Object, TDestination> onSuccessFunc, Func<Failure, TDestination> onFailureFunc);
+
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <inheritdoc cref="IResult"/>
 	public class Result
+		: IResult
 	{
 		protected internal Failure Failure { get; }
 
@@ -16,19 +35,30 @@ namespace Kovi.Data.Cqrs
 			Failure = failure;
 		}
 
-		protected internal Result() : this(null, null)
+		protected internal Result(Failure failure)
+			:this(null,failure)
+		{ }
+
+		protected internal Result() 
+			: this(null, null)
 		{ }
 
 		#endregion .ctor
 
+		/// <summary>
+		/// "Плохой" результат
+		/// </summary>
 		public Boolean IsFaulted => Failure != null;
 
+		/// <summary>
+		/// Успех
+		/// </summary>
 		public Boolean IsSuccess => Failure == null;
 
-		public TDestination Return<TDestination>(TDestination successResult, Func<Failure, TDestination> onFailureFunc)
-			=> IsSuccess ?
-			successResult
-			: onFailureFunc(Failure);
+		//public TDestination Return<TDestination>(TDestination successResult, Func<Failure, TDestination> onFailureFunc)
+		//	=> IsSuccess ?
+		//	successResult
+		//	: onFailureFunc(Failure);
 
 		public TDestination Return<TDestination>(Func<Object, TDestination> onSuccessFunc, Func<Failure, TDestination> onFailureFunc)
 			=> IsSuccess ?
@@ -37,28 +67,59 @@ namespace Kovi.Data.Cqrs
 
 		#region Static fabric
 
-		public static Result Fail(Failure failure, Object value = null)
+		/// <summary>
+		/// Генерирует результат, свидетельствующий о неудачном выполнении
+		/// </summary>
+		/// <param name="failure">Объект, содержащий информацию об ошибках</param>
+		/// <param name="value">Дополнительное значение</param>
+		/// <returns></returns>
+		public static Result Fail(Failure failure)
 		{
 			if (failure == null)
 				throw new ArgumentNullException(nameof(failure));
 
-			return new Result(value, failure);
+			return new Result(failure);
 		}
 
-		public static Result Fail(String message, Object value = null)
+		/// <summary>
+		/// Генерирует результат, свидетельствующий о неудачном выполнении
+		/// </summary>
+		/// <param name="message">Сообщение</param>
+		/// <param name="errorCode">Код ошибки</param>
+		public static Result Fail(String message, Int32 errorCode)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return new Result(value, new Failure(message));
+			return new Result(null, new Failure(message, errorCode));
 		}
 
+		public static Result Fail(String message, Int32 errorCode, Object value)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return new Result(new Failure(message, errorCode, value));
+		}
+
+		/// <summary>
+		/// Генерирует результат, свидетельствующий о неудачном выполнении
+		/// </summary>
+		/// <param name="message">Сообщение</param>
 		public static Result Fail(String message)
 			=> new Result(null, new Failure(message));
 
+		/// <summary>
+		/// Генерирует результат, свидетельствующий об успешном выполнении
+		/// </summary>
 		public static Result Ok()
 			=> new Result();
 
+		/// <summary>
+		/// Генерирует результат, свидетельствующий об успешном выполнении с дополнительными данными
+		/// </summary>
+		/// <param name="value">Дополнительные данные</param>
+		/// <returns></returns>
 		public static Result Ok(Object value)
 			=> new Result(value, null);
 

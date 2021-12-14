@@ -9,6 +9,7 @@ namespace Kovi.Data.Cqrs
 	/// <summary>
 	/// Сервис, обеспечивающий поиск и выполнение команд и запросов.
 	/// </summary>
+	[Obsolete]
 	public class CqServiceLocator : ICqService
 	{
 		private Func<Type,Object> InstanceLocator { get; }

@@ -13,6 +13,13 @@ namespace Kovi.Data.Cqrs.Linq
 	/// <typeparam name="TResponse">Тип результата.</typeparam>
 	public interface ILinqConvertor<TResponse>
 	{
+		/// <summary>
+		/// Конветирует IQueryable в запрашиваемый тип
+		/// </summary>
+		/// <param name="query">Запрос</param>
+		/// <param name="param">Параметры конвертации</param>
+		/// <returns>Результат</returns>
+		/// <remarks>Параметры конвертации - например, номер и размер страцицы</remarks>
 		TResponse Convert(IQueryable query, Object param=null);
 
 		Task<TResponse> ConvertAsync(IQueryable query, Object param=null);
@@ -45,10 +52,10 @@ namespace Kovi.Data.Cqrs.Linq
 
 	public static class ConvertorExtensions
 	{
-		public static TResponse Convert<TResponse>(this IQueryable query, ILinqConvertor<TResponse> convertor, Object param)
+		public static TResponse Convert<TResponse>(this IQueryable query, ILinqConvertor<TResponse> convertor, Object param=null)
 			=> convertor.Convert(query, param);
 
-		public static Task<TResponse> ConvertAsync<TResponse>(this IQueryable query, ILinqConvertor<TResponse> convertor, Object param)
+		public static Task<TResponse> ConvertAsync<TResponse>(this IQueryable query, ILinqConvertor<TResponse> convertor, Object param=null)
 			=> convertor.ConvertAsync(query, param);
 	}
 }

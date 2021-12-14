@@ -19,7 +19,7 @@ namespace Data.Cqrs.Test
 	{
 		protected override Module AutofacModule => new EfAutofacModule();
 
-		IHandlerService hs => Container.Resolve<IHandlerService>();
+		ICqHandlerService hs => Container.Resolve<ICqHandlerService>();
 
 		[TestMethod]
 		public void LinqProviderFactory_Creates_Context()

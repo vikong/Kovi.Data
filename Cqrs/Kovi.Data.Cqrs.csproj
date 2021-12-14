@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -59,7 +59,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -77,7 +76,7 @@
     <Compile Include="Infrastructure\FastTypeInfo.cs" />
     <Compile Include="Infrastructure\IBoundedContext.cs" />
     <Compile Include="Infrastructure\IConnectionFactory.cs" />
-    <Compile Include="Infrastructure\IHandlerService.cs" />
+    <Compile Include="Infrastructure\ICqHandlerService.cs" />
     <Compile Include="Infrastructure\ICqService.cs" />
     <Compile Include="Infrastructure\IDataProviderFactory.cs" />
     <Compile Include="Infrastructure\ILinqProvider.cs" />

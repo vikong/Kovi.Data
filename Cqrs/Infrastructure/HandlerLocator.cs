@@ -7,8 +7,8 @@ namespace Kovi.Data.Cqrs
 	/// <summary>
 	/// Сервис, обеспечивающий поиск и выполнение команд и запросов.
 	/// </summary>
-	/// <inheritdoc cref="IHandlerService"/>
-	public class HandlerLocator : IHandlerService
+	/// <inheritdoc cref="ICqHandlerService"/>
+	public class HandlerLocator : ICqHandlerService
 	{
 		/// <summary>
 		/// Объект-локатор, используемый для инжекции
@@ -44,7 +44,9 @@ namespace Kovi.Data.Cqrs
 		/// <typeparam name="TService">Запрашиваемый тип</typeparam>
 		/// <returns>Объект</returns>
 		protected TService Get<TService>()
-			=> (TService)InstanceLocator(typeof(TService));
+		{
+			return (TService)InstanceLocator(typeof(TService));
+		}
 
 		#region CommandService
 
@@ -60,7 +62,15 @@ namespace Kovi.Data.Cqrs
 		Result ICommandHandlerService.Process<TCommand>(TCommand command)
 		{
 			// получим команду
-			var commandHandler = Get<ICommandHandler<TCommand>>();
+			ICommandHandler<TCommand> commandHandler;
+			try
+			{
+				commandHandler = Get<ICommandHandler<TCommand>>();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception($"Не удалось создать обработчик команды {typeof(TCommand).Name}", ex);
+			}
 
 			// TODO: перенести в декоратор
 			// запрос - проверка
@@ -140,14 +150,30 @@ namespace Kovi.Data.Cqrs
 			public IQueryHandler<TParam, TResponse> QueryHandler<TParam>(TParam param)
 				where TParam : IQriteria
 			{
-				return Get<IQueryHandler<TParam, TResponse>>();
+				try
+				{
+					return Get<IQueryHandler<TParam, TResponse>>();
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"Не удалось создать обработчик запроса {typeof(TParam).Name}, возвращающий {typeof(TResponse).FullName}", ex); 
+				}
 			}
 
 			/// <inheritdoc/>
 			public IAsyncQueryHandler<TParam, TResponse> AsyncQueryHandler<TParam>(TParam param)
 				where TParam : IQriteria
 			{
-				return Get<IAsyncQueryHandler<TParam, TResponse>>();
+				try
+				{
+					return Get<IAsyncQueryHandler<TParam, TResponse>>();
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"Не удалось создать асинхронный обработчик запроса {typeof(TParam).Name}, возвращающий {typeof(TResponse).FullName}", ex);
+				}
+
+				
 			}
 
 			/// <inheritdoc/>

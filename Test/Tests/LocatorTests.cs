@@ -26,7 +26,7 @@ namespace Data.Cqrs.Test
 
 			// сервис
 			builder.RegisterType<HandlerLocator>()
-				.As<IHandlerService>()
+				.As<ICqHandlerService>()
 				.SingleInstance();
 
 			builder.RegisterGenericDecorator(typeof(TestDecoratorQueryHandler<,>), typeof(IQueryHandler<,>));
@@ -94,7 +94,7 @@ namespace Data.Cqrs.Test
 		{
 			var qrit = new StringQriteria { Name = "А" };
 
-			var sl = Container.Resolve<IHandlerService>();
+			var sl = Container.Resolve<ICqHandlerService>();
 
 			var actual = sl
 				.For<QueryResult<String>>()
@@ -111,7 +111,7 @@ namespace Data.Cqrs.Test
 		{
 			var cmd = new SimpleCommand { Name = "А" };
 
-			var sl = Container.Resolve<IHandlerService>();
+			var sl = Container.Resolve<ICqHandlerService>();
 
 			var actual = sl.Process(cmd);
 

@@ -5,10 +5,16 @@ using System.Threading.Tasks;
 
 namespace Kovi.Data.Cqrs.Linq
 {
+	/// <summary>
+	/// Базовый конвертор из IQueryable в результат запроса
+	/// <inheritdoc cref="ILinqConvertor{TResponse}"/>
+	/// </summary>
+	/// <typeparam name="TResponse">Запрашиваемый тип</typeparam>
 	public abstract class BaseLinqConvertor<TResponse>
 		: ILinqConvertor<TResponse>
 		where TResponse : class
 	{
+
 		protected IProjector Projector { get; }
 
 		protected BaseLinqConvertor(IProjector projector)
@@ -16,11 +22,14 @@ namespace Kovi.Data.Cqrs.Linq
 			Projector = projector ?? throw new ArgumentNullException(nameof(projector));
 		}
 
+		/// <inheritdoc/>
 		public abstract TResponse Convert(IQueryable query, Object param = null);
 
+		/// <inheritdoc/>
 		public abstract Task<TResponse> ConvertAsync(IQueryable query, Object param=null);
 	}
 
+	/// <inheritdoc cref="BaseLinqConvertor{TResponse}"/>
 	public class SingleLinqConvertor<TResponse>
 		: BaseLinqConvertor<TResponse>
 		, ISingleLinqConvertor<TResponse>
@@ -31,9 +40,11 @@ namespace Kovi.Data.Cqrs.Linq
 			: base(projector)
 		{ }
 
+		/// <inheritdoc cref="ISingleLinqConvertor{TResponse}"/>
 		public override TResponse Convert(IQueryable query, Object param = null)
 			=> query.ProjectToSingle<TResponse>(Projector);
 
+		/// <inheritdoc cref="ISingleLinqConvertor{TResponse}"/>
 		public override Task<TResponse> ConvertAsync(IQueryable query, Object param=null)
 			=> query.ProjectToSingleAsync<TResponse>(Projector);
 	}

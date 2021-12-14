@@ -23,6 +23,7 @@ namespace Kovi.Data.Cqrs.Linq
 		Task<IEnumerable<TReturn>> ProjectToEnumAsync<TReturn>(IQueryable queryable);
 
 		IPage<TReturn> ProjectToPage<TReturn>(IQueryable queryable, IPaging param);
+
 		Task<IPage<TReturn>> ProjectToPageAsync<TReturn>(IQueryable queryable, IPaging param);
 
 		IPage<TReturn> ProjectToPage<TEntity,TReturn>(IQueryable<TEntity> queryable, IPaging param)

@@ -18,4 +18,6 @@ namespace Kovi.Data.Cqrs.Linq
 
 		//Task<Result> Process(ILinqCommandAsync command, String source = null);
 	}
+
+
 }

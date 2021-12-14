@@ -22,7 +22,7 @@ namespace Data.Cqrs.Test
 
 			// сервис
 			builder.RegisterType<HandlerLocator>()
-				.As<IHandlerService>()
+				.As<ICqHandlerService>()
 				.SingleInstance();
 
 			builder.RegisterGeneric(typeof(LinqQueryHandler<,>))
