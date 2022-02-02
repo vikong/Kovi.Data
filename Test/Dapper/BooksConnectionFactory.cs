@@ -6,9 +6,13 @@ namespace Data.Cqrs.Test.Dapper
 {
 	public class BooksConnectionFactory : IConnectionFactory
 	{
+		private string DefaultConnection 
+			=> @"Data Source=NTB00382;Initial Catalog=BookStore;Integrated Security=True";
+		
 		public IDbConnection Create(String connectionString = null)
 		{
-			return new System.Data.SqlClient.SqlConnection(@"Data Source=NTB00382;Initial Catalog=BookStore;Integrated Security=True");
+			string connStr = connectionString ?? DefaultConnection;
+			return new System.Data.SqlClient.SqlConnection(connStr);
 		}
 	}
 }

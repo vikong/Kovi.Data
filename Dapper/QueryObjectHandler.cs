@@ -31,11 +31,25 @@ namespace Kovi.Data.Dapper
 		/// <returns>Результат</returns>
 		protected abstract TOut HandleQuery(IQueryObject query, IDbConnection connection);
 
+		protected String ConnectionString(Object param)
+		{
+			if (param is IConnection)
+			{
+				var p = param as IConnection;
+			}
+			
+			return param is IConnection connection ?
+				connection.Connection :
+				null;
+		}
+		
 		public TOut Handle(IQueryObject query)
 		{
+			string connectionString = ConnectionString(query.QueryParams);
+
 			try
 			{
-				using (IDbConnection conn = connectionFactory.Create())
+				using (IDbConnection conn = connectionFactory.Create(connectionString))
 				{
 					return HandleQuery(query, conn);
 				}

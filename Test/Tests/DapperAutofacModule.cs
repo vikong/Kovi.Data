@@ -38,6 +38,9 @@ namespace Data.Cqrs.Test
 			builder.RegisterType<BooksDapperQuery>()
 				.As<IQueryHandler<DapperAllBookQriteria, IEnumerable<BookDto>>>();
 
+			builder.RegisterType<DapperConnectionBookQuery>()
+				.As<IQueryHandler<DapperConnectionBookQriteria, IEnumerable<BookDto>>>();
+
 			builder.RegisterType<BookByIdDapperQuery>()
 				.As<IQueryHandler<DapperBookByIdQriteria, BookDto>>();
 

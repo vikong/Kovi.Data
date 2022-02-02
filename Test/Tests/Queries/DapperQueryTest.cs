@@ -47,6 +47,20 @@ namespace Data.Cqrs.Test
 		}
 
 		[TestMethod]
+		public void DapperQueryHandler_WithPredefinedConnection_Returns_Data()
+		{
+			var qh = Container.Resolve<IQueryHandler<DapperConnectionBookQriteria, IEnumerable<BookDto>>>();
+			var qrit = new DapperConnectionBookQriteria();
+
+			var actual = qh.Handle(qrit);
+			foreach (var item in actual)
+			{
+				Console.WriteLine(item.Name);
+			}
+			Assert.IsTrue(actual.Any());
+		}
+
+		[TestMethod]
 		public void DapperBookById_Returns_Book()
 		{
 			var qh = Container.Resolve<IQueryHandler<DapperBookByIdQriteria, BookDto>>();

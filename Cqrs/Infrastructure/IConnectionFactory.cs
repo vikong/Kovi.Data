@@ -9,7 +9,7 @@
 	public interface IConnectionFactory
 	{
 		/// <summary>
-		/// Создает <see cref="IDbConnection" />
+		/// Создает <see cref="IDbConnection"/>
 		/// </summary>
 		IDbConnection Create(String connectionString = null);
 	}
