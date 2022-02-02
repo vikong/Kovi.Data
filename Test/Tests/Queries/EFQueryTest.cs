@@ -11,7 +11,7 @@ namespace Data.Cqrs.Test
 {
 
 	[TestClass]
-	public class QueryEFTest
+	public class EFQueryTest
 		: BaseAutofacTest
 	{
 		protected override Module AutofacModule => new EfAutofacModule();

@@ -1,4 +1,4 @@
-﻿namespace Kovi.Data.Cqrs
+﻿namespace Kovi.Data.Dapper
 {
 	using System;
 
@@ -16,9 +16,9 @@
 		///     Create QueryObject for <paramref name="sql" /> string only
 		/// </summary>
 		/// <param name="sql">SQL string</param>
-		public QueryObject(String sql)
+		public QueryObject(string sql)
 		{
-			if (String.IsNullOrEmpty(sql))
+			if (string.IsNullOrEmpty(sql))
 				throw new ArgumentNullException("Empty SQL.");
 
 			Sql = sql;
@@ -29,7 +29,8 @@
 		/// </summary>
 		/// <param name="sql">SQL string</param>
 		/// <param name="queryParams">Parameter list</param>
-		public QueryObject(String sql, Object queryParams) : this(sql)
+		public QueryObject(string sql, object queryParams)
+			: this(sql)
 		{
 			QueryParams = queryParams;
 		}
@@ -39,13 +40,13 @@
 		/// <summary>
 		///     SQL string
 		/// </summary>
-		public String Sql { get; private set; }
+		public string Sql { get; private set; }
 
 		/// <summary>
 		///     Parameter list
 		/// </summary>
-		public Object QueryParams { get; private set; }
+		public object QueryParams { get; private set; }
 
-		public override String ToString() => Sql;
+		public override string ToString() => Sql;
 	}
 }

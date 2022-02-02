@@ -115,13 +115,10 @@
     <Compile Include="Queries\ILinqRequest.cs" />
     <Compile Include="Queries\IQriteria.cs" />
     <Compile Include="Queries\IQuery.cs" />
-    <Compile Include="Queries\IQueryObjectHandler.cs" />
     <None Include="_\LinqQueries.cs" />
     <Compile Include="Queries\ConvertorLinqRequest.cs" />
     <Compile Include="Queries\Qriterias.cs" />
     <Compile Include="Queries\QueryException.cs" />
-    <Compile Include="Queries\QueryObject.cs" />
-    <Compile Include="Queries\QueryObjectHandler.cs" />
     <Compile Include="Queries\RequestQuery.cs" />
     <Compile Include="Queries\Specifications\FilterSpec.cs" />
     <Compile Include="Queries\Specifications\ILinqSpec.cs" />

@@ -2,7 +2,12 @@
 
 namespace Kovi.Data.Cqrs.Linq
 {
-
+	/// <summary>
+	/// Обработчик запросов Linq
+	/// </summary>
+	/// <typeparam name="TIn">Тип-Параметр</typeparam>
+	/// <typeparam name="TOut">Тип-Результат</typeparam>
+	/// <inheritdoc cref="IQueryHandler{TIn, TOut}"/>
 	public class LinqQueryHandler<TIn, TOut> 
 		: IQueryHandler<TIn, TOut>
 		where TIn : IQriteria
@@ -29,29 +34,5 @@ namespace Kovi.Data.Cqrs.Linq
 			}
 		}
 	}
-
-	//public class LinqQueryHandlerOld<TIn, TOut> : ILinqQueryHandlerOld<TIn, TOut>
-	// where TIn : IQriteria
-	//{
-	//	protected readonly ILinqProviderFactory LinqProviderFactory;
-
-	//	public LinqQueryHandlerOld(ILinqProviderFactory linqProviderFactory)
-	//	{
-	//		LinqProviderFactory = linqProviderFactory;
-	//	}
-
-	//	public TOut Handle(ILinqQueryOld<TIn, TOut> query)
-	//	{
-	//		string connection = query.Qrit is IConnection ?
-	//			((IConnection)query.Qrit).Connection :
-	//			null;
-
-	//		using (ILinqProvider linqProvider = LinqProviderFactory.Create(connection))
-	//		{
-	//			return query.Ask(linqProvider);
-	//		}
-	//	}
-	//}
-
 
 }

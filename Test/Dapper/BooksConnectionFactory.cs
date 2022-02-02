@@ -4,7 +4,7 @@ using Kovi.Data.Cqrs;
 
 namespace Data.Cqrs.Test.Dapper
 {
-	public class DbConnectionFactory : IConnectionFactory
+	public class BooksConnectionFactory : IConnectionFactory
 	{
 		public IDbConnection Create(String connectionString = null)
 		{

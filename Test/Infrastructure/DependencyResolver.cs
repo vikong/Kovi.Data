@@ -32,7 +32,7 @@ namespace Data.Cqrs.Test
 				.To<BookContextFactory>();
 
 			Bind<IConnectionFactory>()
-				.To<Dapper.DbConnectionFactory>();
+				.To<Dapper.BooksConnectionFactory>();
 		}
 	}
 

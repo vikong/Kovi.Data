@@ -4,8 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 
 using Dapper;
-
-using Kovi.Data.Cqrs;
+using Kovi.Data.Dapper;
 
 namespace Kovi.Data.Dapper
 {
@@ -18,7 +17,7 @@ namespace Kovi.Data.Dapper
 		///     Dapper + QueryObject extension for Query
 		/// </summary>
 		public static IEnumerable<T> Query<T>(
-			this QueryObject queryObject,
+			this IQueryObject queryObject,
 			IDbConnection conn,
 			IDbTransaction transaction = null,
 			bool buffered = true,
@@ -29,7 +28,7 @@ namespace Kovi.Data.Dapper
 			=> conn.Query<T>(queryObject.Sql, queryObject.QueryParams, transaction, buffered, commandTimeout, commandType);
 
 		public static T QueryFirstOrDefault<T>(
-			this QueryObject queryObject,
+			this IQueryObject queryObject,
 			IDbConnection cnn,
 			IDbTransaction transaction = null,
 			int? commandTimeout = null,
@@ -38,7 +37,7 @@ namespace Kovi.Data.Dapper
 			=> cnn.QueryFirstOrDefault<T>(queryObject.Sql, queryObject.QueryParams, transaction, commandTimeout, commandType);
 
 		public static Task<IEnumerable<T>> QueryAsync<T>(
-			this QueryObject query,
+			this IQueryObject query,
 			IDbConnection cnn,
 			IDbTransaction transaction = null,
 			int? commandTimeout = null,
@@ -47,7 +46,7 @@ namespace Kovi.Data.Dapper
 			=> cnn.QueryAsync<T>(query.Sql, query.QueryParams, transaction, commandTimeout, commandType);
 
 		public static Task<T> QueryFirstOrDefaultAsync<T>(
-			this QueryObject query,
+			this IQueryObject query,
 			IDbConnection cnn,
 			IDbTransaction transaction = null,
 			int? commandTimeout = null,
@@ -56,7 +55,7 @@ namespace Kovi.Data.Dapper
 			=> cnn.QueryFirstOrDefaultAsync<T>(query.Sql, query.QueryParams, transaction, commandTimeout, commandType);
 
 		public static int Execute(
-			this QueryObject queryObject,
+			this IQueryObject queryObject,
 			IDbConnection conn,
 			IDbTransaction transaction = null,
 			int? commandTimeout = null,

@@ -347,7 +347,7 @@ namespace Data.Cqrs.Test
 		[TestMethod]
 		public void DapperQuery_ForAll_ReturnsAll()
 		{
-			var qrit = new Dapper.AllBookQriteria();
+			var qrit = new Dapper.DapperAllBookQriteria();
 
 			var result = handlerLocator
 				.For<IEnumerable<BookDto>>()
@@ -359,7 +359,7 @@ namespace Data.Cqrs.Test
 		[TestMethod]
 		public async Task DapperAsyncQuery_ForAll_ReturnsAll()
 		{
-			var qrit = new Dapper.AllBookQriteria();
+			var qrit = new Dapper.DapperAllBookQriteria();
 
 			var result = await handlerLocator
 				.For<IEnumerable<BookDto>>()
@@ -372,7 +372,7 @@ namespace Data.Cqrs.Test
 		[TestMethod]
 		public void DapperQuery_ForId_ReturnsBookWithId()
 		{
-			var qrit = new Dapper.BookByIdQriteria { Id = 2 };
+			var qrit = new Dapper.DapperBookByIdQriteria { Id = 2 };
 
 			var result = handlerLocator
 				.For<BookDto>()

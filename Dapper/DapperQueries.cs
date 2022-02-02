@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Kovi.Data.Cqrs;
@@ -9,60 +8,32 @@ namespace Kovi.Data.Dapper
 	/// <summary>
 	/// Базовый класс для запросов с использованием Dapper.
 	/// </summary>
-	/// <typeparam name="TParam">Критерий запроса.</typeparam>
-	/// <typeparam name="TResponse">Результат.</typeparam>
-	public abstract class DapperQuery<TParam, TResponse>
-		: IQuery<TParam, TResponse>
-		where TParam : IQriteria
+	/// <typeparam name="TIn">Тип критерия запроса</typeparam>
+	/// <typeparam name="TOut">Тип результата выполнения запроса</typeparam>
+	/// <inheritdoc cref="IDapperQuery{TIn, TOut}"/>
+	public abstract class BaseDapperQuery<TIn, TOut>
+		: IDapperQuery<TIn, TOut>
+		where TIn : IQriteria
 	{
-		private readonly IQueryObjectHandler<TResponse> QueryHandler;
+		public abstract String Sql { get; }
 
-		public abstract QueryObject Query(TParam param);
+		protected TIn qrit;
 
-		public TResponse Ask(TParam param, string source = null)
-			=> QueryHandler.Ask(Query(param), source);
+		public Object QueryParams => qrit;
 
-		public async Task<TResponse> AskAsync(TParam param, string source = null)
-			=> await QueryHandler.AskAsync(Query(param), source);
+		private readonly IQueryObjectHandler<TOut> handler;
 
-		#region .ctor
-
-		protected DapperQuery(IQueryObjectHandler<TResponse> handler)
+		public BaseDapperQuery(IQueryObjectHandler<TOut> handler)
 		{
-			QueryHandler = handler;
+			this.handler = handler;
 		}
 
-		#endregion .ctor
+		public virtual TOut Handle(TIn qrit)
+		{
+			this.qrit = qrit;
+			return handler.Handle(this);
+		}
 
+		public override string ToString() => Sql;
 	}
-
-	/// <summary>
-	/// Базовый класс для запросов с использованием Dapper, возвращающих одну строку.
-	/// </summary>
-	/// <typeparam name="TParam">Критерий запроса.</typeparam>
-	/// <typeparam name="TResponse">Результат.</typeparam>
-	public abstract class SingleDapperQuery<TParam, TResponse>
-		: DapperQuery<TParam, TResponse>
-		where TParam : IQriteria
-	{
-		protected SingleDapperQuery(IConnectionFactory connectionFactory)
-			: base(new SingleDapperHandlder<TResponse>(connectionFactory))
-		{ }
-	}
-
-	/// <summary>
-	/// Базовый класс для запросов с использованием Dapper, возвращающих несколько строк.
-	/// </summary>
-	/// <typeparam name="TParam">Критерий запроса.</typeparam>
-	/// <typeparam name="TResponse">Результат.</typeparam>
-	public abstract class EnumDapperQuery<TParam, TResponse>
-		: DapperQuery<TParam, IEnumerable<TResponse>>
-		where TParam : IQriteria
-	{
-		protected EnumDapperQuery(IConnectionFactory connectionFactory)
-			: base(new EnumDapperHandlder<TResponse>(connectionFactory))
-		{ }
-	}
-
-
 }

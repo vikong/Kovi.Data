@@ -64,9 +64,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DapperExt.cs" />
+    <Compile Include="QueryObject.cs" />
+    <Compile Include="QueryObjectHandler.cs" />
+    <Compile Include="DapperQueryObjectExtensions.cs" />
     <Compile Include="DapperQueries.cs" />
-    <Compile Include="DapperQueryHandler.cs" />
+    <Compile Include="IDapperQuery.cs" />
+    <Compile Include="IQueryObject.cs" />
+    <Compile Include="IQueryObjectHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
