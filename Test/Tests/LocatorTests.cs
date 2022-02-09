@@ -39,10 +39,10 @@ namespace Data.Cqrs.Test
 				.As<ILinqQuery<SimpleLinqQriteria, QueryResult<String>>>();
 
 			builder.RegisterType<SimpleQuery>()
-				.As<IQueryHandler<StringQriteria, QueryResult<String>>>();
+				.As<IQueryHandler<SimpleQriteria, QueryResult<String>>>();
 
 			builder.RegisterType<SimpleIdQuery>()
-				.As<IQueryHandler<IntQriteria, QueryResult<String>>>();
+				.As<IQueryHandler<IdQriteria, QueryResult<String>>>();
 
 			// команды
 			builder.RegisterType<SimpleCommandHandler>()
@@ -61,8 +61,8 @@ namespace Data.Cqrs.Test
 		{
 			Object actual;
 			
-			actual = Container.Resolve<IQueryHandler<StringQriteria, QueryResult<String>>>();
-			Assert.IsInstanceOfType(actual, typeof(TestDecoratorQueryHandler<StringQriteria, QueryResult<String>>));
+			actual = Container.Resolve<IQueryHandler<SimpleQriteria, QueryResult<String>>>();
+			Assert.IsInstanceOfType(actual, typeof(TestDecoratorQueryHandler<SimpleQriteria, QueryResult<String>>));
 
 			actual = Container.Resolve<IQueryHandler<SimpleLinqQriteria, QueryResult<String>>>();
 			Assert.IsInstanceOfType(actual, typeof(TestDecoratorQueryHandler<SimpleLinqQriteria, QueryResult<String>>));
@@ -92,7 +92,7 @@ namespace Data.Cqrs.Test
 		[TestMethod]
 		public void HandlerLocator_ForQriteria_ReturnsQuery()
 		{
-			var qrit = new StringQriteria { Name = "А" };
+			var qrit = new SimpleQriteria { Name = "А" };
 
 			var sl = Container.Resolve<ICqHandlerService>();
 

@@ -41,28 +41,30 @@ namespace Data.Cqrs.Test
 		//{}
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder($"[{Id}]:\"{Name}\"");
+			StringBuilder sb = new StringBuilder($"ID:{Id}, Name:\"{Name}\", ");
+			sb.Append("Author(s):");
 			if (BookAuthors!=null && BookAuthors.Count() > 0)
 			{
-				sb.Append(": {");
+				sb.Append("[");
 				foreach (var bookAuthor in BookAuthors)
 					sb.AppendFormat("{0},", bookAuthor.Author != null ? bookAuthor.Author.Name : "not-loaded");
 				sb.Remove(sb.Length - 1, 1);
-				sb.Append("}, ");
+				sb.Append("], ");
 			}
 			else
-				sb.Append(": {unkonwn author(s)}, ");
+				sb.Append("unkonwn, ");
 
+			sb.Append("Genre(s):");
 			if (BookGenres != null && BookGenres.Count() > 0)
 			{
-				sb.Append(": {");
+				sb.Append("[");
 				foreach (var bookGenre in BookGenres)
 					sb.AppendFormat("{0},", bookGenre.Genre != null ? bookGenre.Genre.Name : "not-loaded");
 				sb.Remove(sb.Length - 1, 1);
-				sb.Append("}, ");
+				sb.Append("], ");
 			}
 			else
-				sb.Append(": {unkonwn author(s)}, ");
+				sb.Append("unkonwn, ");
 
 			sb.Append($"Raiting:{Raiting ?? 0}, ");
 			//sb.Append($"Genre:{Genre}");

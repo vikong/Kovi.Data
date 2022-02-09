@@ -49,7 +49,7 @@ namespace Data.Cqrs.Test
 
 			// запросы
 			builder.RegisterType<SimpleQuery>()
-				.As<IQueryHandler<StringQriteria, QueryResult<String>>>();
+				.As<IQueryHandler<SimpleQriteria, QueryResult<String>>>();
 
 			builder.RegisterType<AllAuthorLinqQuery>()
 				 .As<ILinqQuery<LinqQriteria, IEnumerable<Author>>>();

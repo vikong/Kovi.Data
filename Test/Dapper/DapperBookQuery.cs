@@ -1,64 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Kovi.Data.Cqrs;
 using Kovi.Data.Dapper;
 
 namespace Data.Cqrs.Test.Dapper
 {
 	/// <summary>
-	/// Все книги
+	/// Все книги "плоским" списком
+	/// </summary>
+	public class DapperAllFlatBookQriteria : IQriteria
+	{ }
+
+	/// <summary>
+	/// Книги в виде "плоского" списка
+	/// </summary>
+	public sealed class DapperAllBooksQuery
+		: DapperQueryBase<DapperAllFlatBookQriteria, BookDto, IEnumerable<BookDto>>
+	{
+		public DapperAllBooksQuery(IDapperQueryHandler<DapperAllFlatBookQriteria, IEnumerable<BookDto>> handler)
+			:base(handler)
+		{ }
+
+		public override String Sql => 
+			@"SELECT * FROM [Book]";
+
+		public override IEnumerable<BookDto> Convert(IEnumerable<BookDto> buffer)
+			=> buffer;
+	}
+
+	/// <summary>
+	/// Все книги как список объектов
 	/// </summary>
 	public class DapperAllBookQriteria : IQriteria
 	{ }
 
-	public sealed class BooksDapperQuery
-		: BaseDapperQuery<DapperAllBookQriteria, IEnumerable<BookDto>>
-	{
-		public override String Sql
-			=> @"SELECT * FROM [Book]";
-
-		public BooksDapperQuery(IEnumQueryObjectHandler<BookDto> handler)
-			: base(handler)
-		{ }
-	}
-
 	/// <summary>
-	/// Книга по Id
+	/// Список книг
 	/// </summary>
-	public class DapperBookByIdQriteria : IQriteria
+	public sealed class BooksDapperMapQuery
+		: DapperQueryBase<DapperAllBookQriteria, BookDto, IEnumerable<BookDto>>
+		, IDapperMapQuery<DapperAllBookQriteria, BookDto, IEnumerable<BookDto>>
 	{
-		public Int32 Id { get; set; }
-	}
-
-	public sealed class BookByIdDapperQuery : BaseDapperQuery<DapperBookByIdQriteria, BookDto>
-	{
-		public override String Sql
-			=> @"SELECT * FROM [Book] WHERE [Id] = @Id";
-
-		public BookByIdDapperQuery(ISingleQueryObjectHandler<BookDto> handler)
-			: base(handler)
+		public BooksDapperMapQuery(IDapperQueryHandler<DapperAllBookQriteria, IEnumerable<BookDto>> handler)
+			:base(handler)
 		{ }
+
+		public override String Sql => 
+@"select *
+from [Book] b
+left join [BookAuthor] ba on b.Id=ba.BookId
+left join [Author] a on ba.AuthorId=a.Id";
+
+		public override IEnumerable<BookDto> Handle(DapperAllBookQriteria qrit)
+		{
+			books = new Dictionary<int, BookDto>();
+			Param = qrit;
+			
+			return QueryHandler.Handle(this);
+		}
+		public Type[] SplitTypes => new Type[] { typeof(Book), typeof(Author) };
+
+		public string SplitOn => "AuthorId";
+		private Dictionary<int, BookDto> books;
+		public BookDto MapFunc(Object[] par)
+		{
+			Book b = par[0] as Book;
+			Author a = par[1] as Author;
+			if (!books.TryGetValue(b.Id, out BookDto bookEntry))
+			{
+				bookEntry = new BookDto
+				{
+					Id = b.Id,
+					Name = b.Name,
+					Raiting = b.Raiting,
+				};
+				books.Add(bookEntry.Id, bookEntry);
+			}
+			var author = new AuthorDto { Id = a.Id, Name = a.Name };
+			bookEntry.BookAuthors.Add(new BookAuthorDto { Book = bookEntry, Author = author });
+
+			return bookEntry;
+		}
+
+		public override IEnumerable<BookDto> Convert(IEnumerable<BookDto> buffer)
+			=> buffer.Distinct().ToList();
+
 	}
-
-	/// <summary>
-	/// Все книги
-	/// </summary>
-	public class DapperConnectionBookQriteria : IQriteria, IConnection
-	{
-		public string Connection =>
-			@"Data Source=NTB00382;Initial Catalog=BookStore;Integrated Security=True";
-	}
-
-	public sealed class DapperConnectionBookQuery
-		: BaseDapperQuery<DapperConnectionBookQriteria, IEnumerable<BookDto>>
-	{
-		public override String Sql
-			=> @"SELECT * FROM [Book]";
-
-		public DapperConnectionBookQuery(IEnumQueryObjectHandler<BookDto> handler)
-			: base(handler)
-		{ }
-	}
-
 
 }

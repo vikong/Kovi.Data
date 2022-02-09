@@ -50,7 +50,7 @@ namespace Data.Cqrs.Test
 		[TestMethod]
 		public void ConventionsTest()
 		{
-			var idQrit = new IdQriteria{Id=1};
+			var idQrit = new EF.IdQriteria { Id = 1};
 			var authorConv = Conventions<AuthorDto>.IdSpec;
 			var authorPageConv = Conventions<AuthorDto>.PageSpec();
 

@@ -192,7 +192,7 @@ namespace Data.Cqrs.Test
 
 				var spec = new ConventionIdLinqSpec<Author>();
 
-				var qrit = new IdQriteria { Id = 2 };
+				var qrit = new EF.IdQriteria { Id = 2 };
 
 				//Act
 				var actual = spec.Query(uow.Linq, qrit);

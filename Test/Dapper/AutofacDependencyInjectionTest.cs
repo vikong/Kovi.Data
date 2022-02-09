@@ -8,7 +8,6 @@ using System.Diagnostics;
 using Kovi.Data.Cqrs;
 using Kovi.Data.Cqrs.Linq;
 using Data.Cqrs.Test.EF;
-using System.Data.Entity.Infrastructure;
 using Kovi.Data.EF;
 using System.Linq;
 using Kovi.Autofac;
@@ -28,8 +27,6 @@ namespace Data.Cqrs.Test
                 var sf = c.Resolve<IComponentContext>().Resolve<AutofacInstanceFactory>();
                 return sf.Resolve;
             });
-            builder.RegisterType<CqServiceLocator>()
-                .As<ICqService>();
 
             // контекст
             builder.RegisterType<BookContextFactory>()
@@ -42,7 +39,10 @@ namespace Data.Cqrs.Test
 
             // запросы
             builder.RegisterType<SimpleQuery>()
-                .As<IQueryHandler<StringQriteria, QueryResult<IEnumerable<String>>>>();
+                .As<IQueryHandler<SimpleQriteria, QueryResult<IEnumerable<String>>>>();
+
+            builder.RegisterType<SimpleIdQuery>()
+                .As<IQueryHandler<IdQriteria, QueryResult<String>>>();
 
             builder.RegisterType<AllAuthorLinqQuery>()
                 .As<IQueryHandler<LinqQriteria, IEnumerable<Author>>>();
@@ -60,8 +60,8 @@ namespace Data.Cqrs.Test
         [TestMethod]
         public void TestMethod1()
         {
-            var qh = Container.Resolve<IQueryHandler<StringQriteria, QueryResult<IEnumerable<String>>>>();
-            var qrit = new StringQriteria()
+            var qh = Container.Resolve<IQueryHandler<SimpleQriteria, QueryResult<IEnumerable<String>>>>();
+            var qrit = new SimpleQriteria()
             {
                 Name = "A",
             };

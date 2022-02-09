@@ -24,26 +24,19 @@ namespace Data.Cqrs.Test
 				.As<ICqHandlerService>()
 				.SingleInstance();
 
-			builder.RegisterGeneric(typeof(EnumQueryObjectHandler<>))
-				.As(typeof(IEnumQueryObjectHandler<>));
-
-			builder.RegisterGeneric(typeof(SingleQueryObjectHandler<>))
-				.As(typeof(ISingleQueryObjectHandler<>));
+			builder.RegisterGeneric(typeof(DapperQueryHandler<,>))
+				.As(typeof(IDapperQueryHandler<,>));
 
 			// контекст
 			builder.RegisterType<BooksConnectionFactory>()
 				.As<IConnectionFactory>();
 
 			// запросы
-			builder.RegisterType<BooksDapperQuery>()
+			builder.RegisterType<DapperAllBooksQuery>()
+				.As<IQueryHandler<DapperAllFlatBookQriteria, IEnumerable<BookDto>>>();
+
+			builder.RegisterType<BooksDapperMapQuery>()
 				.As<IQueryHandler<DapperAllBookQriteria, IEnumerable<BookDto>>>();
-
-			builder.RegisterType<DapperConnectionBookQuery>()
-				.As<IQueryHandler<DapperConnectionBookQriteria, IEnumerable<BookDto>>>();
-
-			builder.RegisterType<BookByIdDapperQuery>()
-				.As<IQueryHandler<DapperBookByIdQriteria, BookDto>>();
-
 		}
 	}
 }

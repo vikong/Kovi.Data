@@ -12,18 +12,21 @@ namespace Data.Cqrs.Test
 {
 	#region Queries
 
-	public class StringQriteria : IQriteria
+	public class SimpleQriteria : IQriteria
 	{
 		public String Name { get; set; }
 	}
 
-	public class SimpleQuery : IQueryHandler<StringQriteria, QueryResult<String>>
+	public class SimpleQuery : IQueryHandler<SimpleQriteria, QueryResult<IEnumerable<String>>>
 	{
-		public QueryResult<String> Handle(StringQriteria qrit)
+		public QueryResult<IEnumerable<String>> Handle(SimpleQriteria qrit)
 		{
-			string data = $"SimpleQuery:{qrit.Name}";
+			string[] data = new string[] { 
+				$"SimpleQuery-1:{qrit.Name}" ,
+				$"SimpleQuery-2:{qrit.Name}" ,
+			};
 
-			var result = new QueryResult<String>(data);
+			var result = new QueryResult<IEnumerable<String>>(data);
 
 			result.From(nameof(SimpleQuery));
 
@@ -31,14 +34,14 @@ namespace Data.Cqrs.Test
 		}
 	}
 
-	public class IntQriteria : IQriteria
+	public class IdQriteria : IQriteria
 	{
 		public int Id { get; set; }
 	}
 
-	public class SimpleIdQuery : IQueryHandler<IntQriteria, QueryResult<String>>
+	public class SimpleIdQuery : IQueryHandler<IdQriteria, QueryResult<String>>
 	{
-		public QueryResult<String> Handle(IntQriteria qrit)
+		public QueryResult<String> Handle(IdQriteria qrit)
 		{
 			string data = $"SimpleIdQuery:{qrit.Id}";
 
@@ -64,6 +67,25 @@ namespace Data.Cqrs.Test
 			var result = new QueryResult<String>($"{Data}:{q.Name}");
 
 			result.From(Data);
+
+			return result;
+		}
+	}
+
+	public class IdLinqQriteria : IQriteria
+	{
+		public int Id { get; set; }
+	}
+
+	public class IdLinqQuery : IQueryHandler<IdLinqQriteria, QueryResult<String>>
+	{
+		public QueryResult<String> Handle(IdLinqQriteria qrit)
+		{
+			string data = $"SimpleIdQuery:{qrit.Id}";
+
+			var result = new QueryResult<String>(data);
+
+			result.From(nameof(SimpleIdQuery));
 
 			return result;
 		}
@@ -135,46 +157,46 @@ namespace Data.Cqrs.Test
 	{
 		public int Id { get; set; }
 	}
-	public class DapperQuery : IQueryHandler<Qrit2, QResult>
-	{
-		protected readonly IDapperQueryHandler<Qrit2, QResult> QueryHandler;
-		public DapperQuery(IDapperQueryHandler<Qrit2, QResult> queryHandler)
-		{
-			QueryHandler = queryHandler;
-		}
+	//public class DapperQuery : IQueryHandler<Qrit2, QResult>
+	//{
+	//	protected readonly IDapperQueryHandler<Qrit2, QResult> QueryHandler;
+	//	public DapperQuery(IDapperQueryHandler<Qrit2, QResult> queryHandler)
+	//	{
+	//		QueryHandler = queryHandler;
+	//	}
 
-		public QResult Handle(Qrit2 qrit)
-		{
-			return new QResult
-			{
-				From = nameof(DapperQuery),
-				List = new EntityDto[]
-				{
-				new EntityDto { Id=1, Name="01"},
-				new EntityDto { Id=1, Name="02"},
-				}
-			};
+	//	public QResult Handle(Qrit2 qrit)
+	//	{
+	//		return new QResult
+	//		{
+	//			From = nameof(DapperQuery),
+	//			List = new EntityDto[]
+	//			{
+	//			new EntityDto { Id=1, Name="01"},
+	//			new EntityDto { Id=1, Name="02"},
+	//			}
+	//		};
 
-		}
-	}
+	//	}
+	//}
 
-	public class DapperQueryHandler<TIn, TOut> : IDapperQueryHandler<TIn, TOut>
-		where TIn : IQriteria
-	{
-		protected readonly IDapperQueryHandler<TIn, TOut> Decorated;
+	//public class DapperQueryHandler<TIn, TOut> : IDapperQueryHandler<TIn, TOut>
+	//	where TIn : IQriteria
+	//{
+	//	protected readonly IDapperQueryHandler<TIn, TOut> Decorated;
 
-		public DapperQueryHandler(IDapperQueryHandler<TIn, TOut> decorated)
-		{
-			Decorated = decorated;
-		}
+	//	public DapperQueryHandler(IDapperQueryHandler<TIn, TOut> decorated)
+	//	{
+	//		Decorated = decorated;
+	//	}
 
-		public TOut Handle(TIn input)
-		{
-			Debug.WriteLine("DapperHandler Handle");
-			var result = Decorated.Handle(input);
-			return result;
-		}
-	}
+	//	public TOut Handle(TIn input)
+	//	{
+	//		Debug.WriteLine("DapperHandler Handle");
+	//		var result = Decorated.Handle(input);
+	//		return result;
+	//	}
+	//}
 
 	//public class LinqQueryHandler<TIn, TOut> : IQueryHandler<TIn, TOut>
 	//    where TIn: IQrit

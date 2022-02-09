@@ -12,9 +12,9 @@ namespace Kovi.Data.Cqrs
 		/// <summary>
 		/// Обрабатывает входные данные
 		/// </summary>
-		/// <param name="input">Тип входных данных</param>
+		/// <param name="param">Входные данные</param>
 		/// <returns>Результат обработки</returns>
-		TOut Handle(TIn input);
+		TOut Handle(TIn param);
 	}
 
 	/// <summary>
@@ -27,8 +27,8 @@ namespace Kovi.Data.Cqrs
 		/// <summary>
 		/// Обрабатывает входные данные
 		/// </summary>
-		/// <param name="input">Тип входных данных</param>
+		/// <param name="param">Входные данные</param>
 		/// <returns>Ожидаемый результат обработки</returns>
-		Task<TOut> HandleAsync(TIn input);
+		Task<TOut> HandleAsync(TIn param);
 	}
 }

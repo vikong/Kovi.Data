@@ -98,7 +98,7 @@ namespace Data.Cqrs.Test
 		public void Query_ById_Returns_EntityWithId()
 		{
 			//Arrange
-			var qrit = new IdQriteria { Id = 2 };
+			var qrit = new EF.IdQriteria { Id = 2 };
 
 			//Act
 			var actual = handlerLocator
@@ -204,7 +204,7 @@ namespace Data.Cqrs.Test
 				.For<IEnumerable<BookDto>>()
 				.AskAsync(new BookOrAuthorQriteria());
 
-			var idQrit = new IdQriteria { Id = 2 };
+			var idQrit = new EF.IdQriteria { Id = 2 };
 			var book = await handlerLocator
 				.For<BookDto>()
 				.AskAsync(idQrit);
@@ -369,18 +369,18 @@ namespace Data.Cqrs.Test
 
 		}
 
-		[TestMethod]
-		public void DapperQuery_ForId_ReturnsBookWithId()
-		{
-			var qrit = new Dapper.DapperBookByIdQriteria { Id = 2 };
+		//[TestMethod]
+		//public void DapperQuery_ForId_ReturnsBookWithId()
+		//{
+		//	var qrit = new Dapper.DapperBookByIdQriteria { Id = 2 };
 
-			var result = handlerLocator
-				.For<BookDto>()
-				.Ask(qrit);
+		//	var result = handlerLocator
+		//		.For<BookDto>()
+		//		.Ask(qrit);
 
-			Assert.AreEqual(2, result.Id);
+		//	Assert.AreEqual(2, result.Id);
 
-		}
+		//}
 
 	}
 }

@@ -64,10 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DapperQueryBase.cs" />
+    <Compile Include="DapperQueryHandler.cs" />
     <Compile Include="QueryObject.cs" />
     <Compile Include="QueryObjectHandler.cs" />
     <Compile Include="DapperQueryObjectExtensions.cs" />
-    <Compile Include="DapperQueries.cs" />
     <Compile Include="IDapperQuery.cs" />
     <Compile Include="IQueryObject.cs" />
     <Compile Include="IQueryObjectHandler.cs" />

@@ -19,8 +19,8 @@ namespace Data.Cqrs.Test
 		[TestMethod]
 		public void SimpleQuery_ReturnsData()
 		{
-			var qh = Container.Resolve<IQueryHandler<StringQriteria, QueryResult<IEnumerable<String>>>>();
-			var qrit = new StringQriteria()
+			var qh = Container.Resolve<IQueryHandler<SimpleQriteria, QueryResult<IEnumerable<String>>>>();
+			var qrit = new SimpleQriteria()
 			{
 				Name = "A",
 			};

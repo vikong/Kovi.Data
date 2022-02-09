@@ -64,8 +64,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=6.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.6.3.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
@@ -120,6 +120,7 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -152,7 +153,6 @@
     <Compile Include="Cqrs\SimpleQueriesAndCommands.cs" />
     <Compile Include="Cqrs\Qriterias.cs" />
     <Compile Include="Cqrs\TestDecoratorQueryHandler.cs" />
-    <Compile Include="Dapper\IDapperQueryHandler.cs" />
     <Compile Include="EF\Queries.cs" />
     <Compile Include="Infrastructure\AutoMapperModule.cs" />
     <Compile Include="Messages.Designer.cs">
@@ -187,20 +187,20 @@
     <Compile Include="EF\BookCommands.cs" />
     <Compile Include="EF\EFBookQuery.cs" />
     <Compile Include="Tests\DapperAutofacModule.cs" />
-    <Compile Include="Tests\EfAutofacModule.cs" />
+    <Compile Include="EF\EfAutofacModule.cs" />
     <Compile Include="Tests\LocatorTests.cs" />
     <Compile Include="Tests\EFCommandTest.cs" />
-    <Compile Include="Tests\Queries\DapperQueryTest.cs" />
+    <Compile Include="Tests\Dapper\DapperQueryTest.cs" />
     <Compile Include="Tests\QueryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\Stub.cs" />
-    <Compile Include="Tests\Queries\EFQueryTest.cs" />
+    <Compile Include="Tests\EF\EFQueryTest.cs" />
     <Compile Include="Tests\RulesTest.cs" />
     <Compile Include="Tests\Laboratory.cs" />
     <Compile Include="Tests\ConventionsTest.cs" />
     <Compile Include="Tests\SpecificationTest.cs" />
     <Compile Include="Tests\ConvertorTests.cs" />
-    <Compile Include="Tests\AutofacDependencyInjectionTest.cs" />
+    <Compile Include="Dapper\AutofacDependencyInjectionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -247,9 +247,7 @@
   <ItemGroup>
     <None Include="_ToDo.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cqrs\Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

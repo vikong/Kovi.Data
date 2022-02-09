@@ -5,10 +5,13 @@ using Kovi.LinqExtensions;
 namespace Kovi.Data.Cqrs
 {
 	/// <summary>
-	/// Интерфейс, сигнализирующий о том, что класс является критерием для запроса
+	/// Представляет параметры запроса
 	/// </summary>
 	public interface IQriteria { }
 
+	/// <summary>
+	/// Представляет строку соединения с поставщиком данных
+	/// </summary>
 	public interface IConnection
 	{ 
 		String Connection { get; }
