@@ -71,10 +71,11 @@ namespace Data.Cqrs.Test
 		{
 			const string sql = 
 @"
+select count(id) from [Book];
 select *
 from [Book] b
 left join [BookAuthor] ba on b.Id=ba.BookId
-left join [Author] a on ba.AuthorId=a.Id";
+left join [Author] a on ba.AuthorId=a.Id;";
 
 			var books = new Dictionary<int, BookDto>();
 
@@ -83,89 +84,21 @@ left join [Author] a on ba.AuthorId=a.Id";
 				try
 				{
 					dbConn.Open();
+					using (SqlMapper.GridReader dapper =dbConn.QueryMultiple(sql))
+					{
+						var cnt = dapper.ReadFirst<int>();
+						var rec = dapper.Read<BookDto>();
+					}
 				}
 				catch (Exception ex)
 				{
 					Assert.Fail($"Connection is not open. {ex.Message}");
 				}
 
-				BookDto mapFunc(Book b, Author a)
-				{
-					BookDto bookEntry;
-					if (!books.TryGetValue(b.Id, out bookEntry))
-					{
-						bookEntry = new BookDto
-						{
-							Id = b.Id,
-							Name = b.Name,
-							Raiting = b.Raiting,
-						};
-						books.Add(bookEntry.Id, bookEntry);
-					}
-					var author = new AuthorDto { Id = a.Id, Name = a.Name };
-					bookEntry.BookAuthors.Add(new BookAuthorDto { Book = bookEntry, Author = author });
-					return bookEntry;
-				};
-				
-				var actual = dbConn.Query<Book, Author, BookDto>(sql,
-					map: mapFunc,
-					splitOn: "AuthorId")
-					.Distinct()
-					.ToList();
-
-				var books1 = new Dictionary<int, BookDto>();
-
-				BookDto mapFunc1(Object[] par)
-				{
-					Book b = par[0] as Book;
-					Author a = par[1] as Author;
-					BookDto bookEntry;
-					if (!books1.TryGetValue(b.Id, out bookEntry))
-					{
-						bookEntry = new BookDto
-						{
-							Id = b.Id,
-							Name = b.Name,
-							Raiting = b.Raiting,
-						};
-						books1.Add(bookEntry.Id, bookEntry);
-					}
-					var author = new AuthorDto { Id = a.Id, Name = a.Name };
-					bookEntry.BookAuthors.Add(new BookAuthorDto { Book = bookEntry, Author = author });
-					return bookEntry;
-				};
-				var actual1 = dbConn.Query<BookDto>(sql, 
-					new Type[] { typeof(Book), typeof(Author) },
-					map: mapFunc1,
-					splitOn: "AuthorId",
-					param: null)
-					.Distinct()
-					.ToList();
-
-				//var actual = dbConn.Query<Book,Author,BookDto>(sql, 
-				//	map:(b,a)=>{
-				//		BookDto bookEntry;
-				//		if (!books.TryGetValue(b.Id, out bookEntry))
-				//		{ 
-				//			bookEntry = new BookDto
-				//			{
-				//				Id = b.Id,
-				//				Name = b.Name,
-				//				Raiting = b.Raiting,
-				//			};
-				//			books.Add(bookEntry.Id, bookEntry);
-				//		}
-				//		var author = new AuthorDto { Id = a.Id, Name = a.Name };
-				//		bookEntry.BookAuthors.Add(new BookAuthorDto { Book=bookEntry, Author = author });
-				//		return bookEntry;
-				//	}, 
-				//	splitOn: "AuthorId")
-				//	.Distinct()
-				//	.ToList();
-				foreach (var item in actual1)
-				{
-					Console.WriteLine(item);
-				}
+				//foreach (var item in actual1)
+				//{
+				//	Console.WriteLine(item);
+				//}
 			}
 		}
 

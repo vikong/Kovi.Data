@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="DapperQueryBase.cs" />
     <Compile Include="DapperQueryHandler.cs" />
+    <Compile Include="ISql.cs" />
+    <Compile Include="QueryBuilder.cs" />
     <Compile Include="QueryObject.cs" />
     <Compile Include="QueryObjectHandler.cs" />
     <Compile Include="DapperQueryObjectExtensions.cs" />

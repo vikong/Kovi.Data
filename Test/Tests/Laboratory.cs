@@ -10,12 +10,176 @@ using Kovi.Data.Cqrs.Infrastructure;
 using Kovi.Data.Cqrs.Linq;
 using System.Data.Entity;
 using System.Collections;
+using System.Data.OleDb;
+using Dapper;
+using VfpClient;
+using System.Data;
 
 namespace Data.Cqrs.Test
 {
-	[TestClass]
-	public class UnitTest2
+	public partial class Car
 	{
+
+		#region prop
+		public string Guid { get; set; }
+
+		public string CarNumber { get; protected set; }
+		public string CargoName { get; set; }
+		public string Tir { get; set; }
+		public DateTime? Crgdateoff { get; set; }
+		public string Driver { get; set; }
+		public DateTime? Entry { get; set; }
+		public DateTime? Realcomin { get; set; }
+
+		public string Licid { get; set; }
+		public string Altapropid { get; set; }
+		public DateTime? Billdate { get; set; }
+		public string Billtypeid { get; set; }
+		public Int32? PlombCount { get; set; }
+		public string Info { get; set; }
+		public string Comment { get; set; }
+		public string Reason { get; set; }
+		public DateTime? Stamp { get; set; }
+		public string TermId { get; set; }
+		public string Ucn { get; protected set; }
+		public string Vehicle { get; set; }
+		public string Whostateid { get; set; }
+
+		public string CarPlaceId { get; set; }
+
+		public int DocCount { get; set; }
+
+		#endregion prop
+
+		[Obsolete("For EF only", true)]
+		public Car()
+		{ }
+
+
+	}
+
+	[TestClass]
+	public class Laboratory
+	{
+		[TestMethod]
+		public void OleDbFoxPro_Sql_Test()
+		{
+			string efsql =
+@"SELECT 
+P2.Guid1 AS Guid, 
+P2.Guid2 AS Guid1, 
+P2.C1, 
+P2.Cargoname, 
+P2.Carnumber, 
+P2.Entry, 
+P2.Guid AS Guid2, 
+P2.Realcomin, 
+P2.Tir, 
+P2.Vehicle, 
+P2.C2, 
+P2.Monitorid, 
+P2.C3, 
+P2.Guid3, 
+P2.Inn, 
+P2.Name
+FROM ( SELECT 
+	Limit1.Guid, 
+	Limit1.Carnumber, 
+	Limit1.Cargoname, 
+	Limit1.Tir, 
+	Limit1.Entry, 
+	Limit1.Realcomin, 
+	Limit1.Vehicle, 
+	Limit1.Guid1, 
+	Limit1.Guid2, 
+	Limit1.C1, 
+	Limit1.C2, 
+	Limit1.Monitorid, 
+	E5.Guid AS Guid3, 
+	E5.Inn, 
+	E5.Name, 
+	 CAST( ICASE(ISNULL(E5.Guid),CAST(NULL AS i),1) AS i) AS C3
+	FROM   (SELECT TOP 10 P11.Guid Guid, P11.Carnumber Carnumber, P11.Cargoname Cargoname, P11.Tir Tir, P11.Entry Entry, P11.Realcomin Realcomin, P11.Vehicle Vehicle, P11.Guid1 Guid1, P11.Buyerid Buyerid, P11.Guid2 Guid2, P11.C1 C1, P11.C2 C2, P11.Monitorid Monitorid
+		FROM (select *, recno() as row_number from ( SELECT P1.Guid Guid, P1.Carnumber Carnumber, P1.Cargoname Cargoname, P1.Tir Tir, P1.Entry Entry, P1.Realcomin Realcomin, P1.Vehicle Vehicle, P1.Guid1 Guid1, P1.Buyerid Buyerid, P1.Guid2 Guid2, P1.C1 C1, P1.C2 C2, P1.Monitorid Monitorid
+			FROM ( SELECT 
+				E1.Guid, 
+				E1.Carnumber, 
+				E1.Cargoname, 
+				E1.Tir, 
+				E1.Entry, 
+				E1.Realcomin, 
+				E1.Vehicle, 
+				E2.Guid AS Guid1, 
+				E2.Buyerid, 
+				E3.Guid AS Guid2, 
+				1 AS C1, 
+				ICASE(!ISNULL(G1.K1),G1.A1,0) AS C2, 
+				G1.K1 AS Monitorid
+				FROM    Monitor E1
+				INNER JOIN Buyerpac E2 ON E1.Guid = E2.Carid
+				INNER JOIN Buser E3 ON E2.Buyerid = E3.Buyerid
+				LEFT JOIN  (SELECT 
+					E4.K1 AS K1, 
+					CAST(Count(E4.A1) as i) AS A1
+					FROM ( SELECT 
+						E4.Monitorid AS K1, 
+						1 AS A1
+						FROM Scandoc E4
+					)  E4
+					GROUP BY K1 ) G1 ON E1.Guid = G1.K1
+				WHERE (  ((E1.Carplaceid = '        ') AND ((ICASE((E1.Carplaceid) IS NULL,.T.,.F.)) = (ICASE(('        ') IS NULL,.T.,.F.))))) AND (E3.Userid = @UserId) and (E1.entry>=@From and E1.entry<@To)
+			)  P1
+			ORDER BY P1.Realcomin DESC, P1.Carnumber
+		) P1)  P11
+		WHERE P11.row_number > 0
+		ORDER BY P11.Realcomin DESC, P11.Carnumber ) Limit1
+	LEFT JOIN Buyer E5 ON Limit1.Buyerid = E5.Guid
+)  P2
+ORDER BY P2.Realcomin DESC, P2.Carnumber, P2.Guid1, P2.Guid2, P2.Guid, P2.Monitorid, P2.C3";
+			
+			string sql =
+@"select
+mn.guid, mn.CarNumber, mn.CargoName, mn.Tir, mn.Entry, mn.realComin, mn.Vehicle, 
+b.guid as buyerId, b.name as buyerName, b.inn, 
+count(sd.monitorId) as docCount 
+from monitor mn 
+inner join buyerPac bp on mn.guid=bp.carId 
+inner join buyer b on bp.buyerId=b.guid 
+inner join bUser bu on bp.buyerId=bu.buyerId 
+left join scandoc sd on mn.guid=sd.monitorId 
+where (mn.CarPlaceId=='        ') 
+and (bu.UserId = @UserId) 
+and (mn.RealComin>=@From and mn.RealComin<@To) 
+group by mn.guid, mn.CarNumber, mn.CargoName, mn.Tir, mn.Entry, mn.realComin, mn.Vehicle, 
+b.guid, b.name, b.inn
+order by mn.RealComin";
+
+			string dataPath = @"\\ntbkfs\prog\Piramida\Krk2a\bases\BORODKI\";
+			//string dataPath = @"E:\monitor_client\BASES\BORODKI\";
+			Stopwatch stopwatch = new Stopwatch();
+			List<Car>  result;
+			using (IDbConnection conn = new VfpConnection($"Provider=VFPOLEDB.1;Data Source={dataPath};"))
+			{
+				stopwatch.Start();
+				conn.Open();
+
+				result = conn.Query<Car>(sql, 
+					new { UserId = "k_3ш+By`", From=new DateTime(2021,10,1), To = new DateTime(2021, 11, 1) })
+					.ToList();
+
+				//result = conn.Query<Car>(sql, new { CarPlaceId="        ", UserId= "+{kЯ$Дж+" }).ToList();
+				//result = conn.Query<Car>(sql,new { p__linq__0="        ", p__linq__1 = "+{kЯ$Дж+" }).ToList();
+
+				conn.Close();
+				stopwatch.Stop();
+			}
+			Console.WriteLine($"Selected {result.Count} rows at {stopwatch.Elapsed}");
+			foreach (var item in result)
+			{
+				Console.WriteLine($"Id:'{item.Guid}' CarNumber:{item.CarNumber.Trim()} Entry:{item.Entry} Doc(s):{item.DocCount}");
+			}
+		}
+
 		[TestMethod]
 		public void TakePage()
 		{

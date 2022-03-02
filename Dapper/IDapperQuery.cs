@@ -9,13 +9,8 @@
 	/// <typeparam name="TIn">Тип параметров запроса</typeparam>
 	/// <typeparam name="T">Тип данных, возвращаемых Dapper</typeparam>
 	/// <typeparam name="TOut">Тип возвращаемых данных</typeparam>
-	public interface IDapperQuery<TIn, T, TOut>
+	public interface IDapperQuery<TIn, T, TOut> : ISql
 	{
-		/// <summary>
-		/// Запрос SQL для выполнения
-		/// </summary>
-		String Sql { get; }
-
 		/// <summary>
 		/// Параметры запроса
 		/// </summary>
